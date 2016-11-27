@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: UNI_sensor.PcbDoc   14.09.2013  15:58:55
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : UNI_sensor.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        0.3mm (11.811mil)        Round          1                0.00 mm (0.00 Inch)
+T2        0.7mm (27.559mil)        Round          20               84.00 mm (3.31 Inch)
+T3        1mm (39.37mil)           Round          8                45.32 mm (1.78 Inch)
+T4        1.2mm (47.244mil)        Round          4                15.00 mm (0.59 Inch)
+T5        3.5mm (137.795mil)       Round          2         NPTH   44.10 mm (1.74 Inch)
+---------------------------------------------------------------------------
+Totals                                            35               188.43 mm (7.42 Inch)
+
+Total Processing Time (hh:mm:ss) : 00:00:00

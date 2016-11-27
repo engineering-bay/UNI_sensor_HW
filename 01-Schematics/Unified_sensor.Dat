@@ -1,0 +1,13 @@
+Field=Designator~String~Designator~100|Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|ReportField=Currency~<none>|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~Unified_sensor.PrjPcb|ReportField=ProjectFullPath~D:\Work\Projects\02 - SmartHome\03_Unified_sensor\Unified_sensor.PrjPcb|ReportField=Title~Bill of Materials For Project [Unified_sensor.PrjPcb] (No PCB Document Selected)|ReportField=TotalQuantity~22|ReportField=ReportTime~20:41:20|ReportField=ReportDate~15.08.2013|ReportField=ReportDateTime~15.08.2013 20:41:20|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=Address1~|ReportField=Address2~|ReportField=Address3~|ReportField=Address4~|ReportField=ApprovedBy~|ReportField=Author~|ReportField=CheckedBy~|ReportField=CompanyName~|ReportField=CurrentDate~15.08.2013|ReportField=CurrentTime~20:41:19|ReportField=Date~|ReportField=DocumentFullPathAndName~D:\Work\Projects\02 - SmartHome\03_Unified_sensor\UNI_sensor.SchDoc|ReportField=DocumentName~UNI_sensor.SchDoc|ReportField=DocumentNumber~|ReportField=DrawnBy~|ReportField=Engineer~|ReportField=ImagePath~|ReportField=ModifiedDate~03.08.2013|ReportField=Organization~|ReportField=ProjectName~Unified_sensor.PrjPcb|ReportField=Revision~|ReportField=Rule~|ReportField=SheetNumber~|ReportField=SheetTotal~|ReportField=Time~|ReportField=Title~|ReportField=DataSourceFileName~Unified_sensor.PrjPcb|ReportField=DataSourceFullPath~D:\Work\Projects\02 - SmartHome\03_Unified_sensor\Unified_sensor.PrjPcb
+A1|XBee_RF_module||XBee_module|XBee_RF_module|1
+C1|0.1u||C0805|C0805|1
+C2|1u||C0805|C0805|1
+J2, J3, J4, J5, J6, J7|Pin||JAMPER1|Pin|6
+R1, R2|100k||R0805|RES_SMD|2
+R3, R5|47k||R0805|RES_SMD|2
+R4|10k||R0805|RES_SMD|1
+R6, R7|100||R0805|RES_SMD|2
+U1|MSP430G2553||TSSOP-20|MSP430G2553|1
+VT1, VT2|BC817||SOT23|BC817|2
+X1|Terminal block TB-2||TB-2_metric|TB-2|1
+X2, X3|||TB-2_metric|TB-2|2
