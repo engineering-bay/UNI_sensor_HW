@@ -12,6 +12,9 @@
 #define TX_BUFFER_SIZE	50
 #define RX_BUFFER_SIZE	50
 
+#define RFMODULETYPE_UNKNOWN	0
+#define RFMODULETYPE_XBEE		1
+#define RFMODULETYPE_MRF24		2
 
 extern void init_mcu(void);
 extern void ZigbeeModuleInit(void);

@@ -10,36 +10,46 @@
 #include <MRF24J40.h>
 #include <zigbee.h>
 #include <user_cfg.h>
+#include "xbee.h"
 
-#define RFMODULETYPE_UNKNOWN	0
-#define RFMODULETYPE_XBEE		1
-#define RFMODULETYPE_MRF24		2
 
+extern uint8_t OwnAddress;
+extern unsigned char RX_buffer[];
+extern unsigned char TX_buffer[];
+extern int TX_index, RX_index, TX_length;
+extern float param[];
+extern float tmp1[], tmp2[];
+extern int window_size;
 extern unsigned char RFType;
+
+char * uart_tx_buffer;
 unsigned char ZigbeeMac[8] = {0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18};
+
 
 void ZigbeeModuleInit(void)
 {
-	RFType = GetRFModuleType();
+	RFType = RFMODULETYPE_XBEE;
+	InitXBee();
+	/*RFType = GetRFModuleType();
 	switch(RFType)
 	{
-		case 1:  // if XBee module used
+		case RFMODULETYPE_XBEE:  // if XBee module used
 			InitXBee();
 			break;
 
-		case 2:  // if MRF24 module used
+		case RFMODULETYPE_MRF24:  // if MRF24 module used
 			InitMRF24();
 			break;
-	}
+	}*/
 }
 
 int GetRFModuleType(void)
 {
 	unsigned char *ptr;
-	unsigned char str_xbee[] = {0x7E, 0x00, 0x05, 0x8A, 0x00, 0x75}; // XBee module API status request
+	unsigned char str_xbee[8] = {0x7E, 0x00, 0x04, 0x08, 0x01, 0x4E, 0x49, 0x5F}; // XBee module API status request
 	// 0001_0010 0010_0100
 	//unsigned char str_mrf24[] = {0x24, 0x00}; // MRF24 module
-	UART_tx_data(str_xbee, 6);
+	UART_tx_data(str_xbee, 8);
 	ptr = UART_rx_data(30000, 6);
 	if(ptr != 0)
 	{

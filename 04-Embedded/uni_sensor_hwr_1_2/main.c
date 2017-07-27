@@ -1,6 +1,7 @@
 #include <msp430.h> 
 #include <uni_sensor.h>
 #include <hal.h>
+#include <xbee.h>
 
 //====================================================================
 #define STATE_ENERGYSAVING			0x01
@@ -14,8 +15,8 @@
 #define DS_CAL_ADC_15T85			0x000A
 //====================================================================
 unsigned char OwnAddress, RFType = 0, DoorIntDir[2] = {1, 1};
-int n_izm, TX_index, RX_index, TX_length;
-int datanum, ADC_res;
+int n_izm, TX_index, RX_index, TX_length, TXRequest = 0;
+int datanum, ADC_res, window_size = WINDOW_SIZE;
 int FrameStartFlag = 0, FrameLength, SensorState = STATE_ENERGYSAVING;
 unsigned int *ptrCal30, *ptrCal85, Cal30, Cal85;
 float param[4] = {0.0, 0.0, 0.0, 0.0}, Tconst;
@@ -33,8 +34,8 @@ void main(void)
 	P2OUT |= BIT0; // get RF module out of RESET
 	__delay_cycles(300);
 	P2OUT &= ~BIT2;
-	__delay_cycles(300);
-	P2OUT |= BIT2;
+	__delay_cycles(3000);
+	//P2OUT |= BIT2;
 
 	// Calculate Temp sensor calibrating constant
 	ptrCal30 = (unsigned int *) (DS_TAG_ADC10_1 + DS_CAL_ADC_15T30);
@@ -50,8 +51,27 @@ void main(void)
 
 	while(1)
 	{
-		__delay_cycles(300);  // delay 3 cycles
-		//__bis_SR_register(LPM3_bits); // go to LPM3
+		//__delay_cycles(200);  // delay 3 cycles
+		if(TXRequest == 1)
+		{
+			if(RFType == RFMODULETYPE_XBEE)
+			{
+				XBEE_senddata_api();
+			}
+			else
+			{
+				if(RFType == RFMODULETYPE_MRF24)
+				{
+					tx_stat = MRF_sendPacket(0);
+				}
+			}
+			datanum = 0;
+			TXRequest = 0;
+		}
+		if(SensorState == STATE_ENERGYSAVING)
+		{
+			//__bis_SR_register(LPM3_bits); // go to LPM3
+		}
 	}
 }
 
@@ -92,9 +112,7 @@ __interrupt void ADC10_ISR_HOOK(void)
 			param[0] += (tmp1[i]/(float)WINDOW_SIZE);
 			param[3] += (tmp2[i]/(float)WINDOW_SIZE);
 		}
-		//XBEE_senddata_api();
-		tx_stat = MRF_sendPacket(0);
-		datanum = 0;
+		TXRequest = 1;
 	  }
 	}
 }
@@ -134,8 +152,8 @@ __interrupt void USCI0TX_ISR_HOOK(void)
 		}
 		else
 		{
-			_delay_cycles(200000);
-			//P2OUT |= BIT2; 						// Xbee module request sleep mode
+			__delay_cycles(150000);
+			P2OUT |= BIT2; 						// Xbee module request sleep mode
 			IFG2 &= ~UCA0TXIFG;		// Reset interrupt flag
 		}
 	}
@@ -231,52 +249,51 @@ __interrupt void TIMER0_A0_ISR_HOOK(void)
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR_HOOK(void)
 {
+	__bic_SR_register(GIE);
 	if((P1IFG & BIT3) == BIT3)
 	{
-		__delay_cycles(1000);
+		__delay_cycles(2000);
 		if((P1IN & BIT3) == 0 && DoorIntDir[0] == 0)	// work if P1IES = 0;
 		{
 			TA0R = 0x00;
 			param[1] = 0.0;
-			__bic_SR_register(GIE);
 			P1IES |= BIT3;
 			DoorIntDir[0] = 1;
 			__bis_SR_register(GIE);
-			tx_stat = MRF_sendPacket(0);
+			TXRequest = 1;
 		}
 		if((P1IN & BIT3) == BIT3 && DoorIntDir[0] == 1)	// work if P1IES = 1;
 		{
 			TA0R = 0x00;
 			param[1] = 1.0;
-			__bic_SR_register(GIE);
 			P1IES &= ~BIT3;
 			DoorIntDir[0] = 0;
 			__bis_SR_register(GIE);
-			tx_stat = MRF_sendPacket(0);
+			TXRequest = 1;
 		}
+		P1IFG &= ~BIT3; // reset Interrupt flag
 	}
 	if((P1IFG & BIT4) == BIT4)
 	{
-		__delay_cycles(1000);
+		__delay_cycles(2000);
 		if((P1IN & BIT4) == 0 && DoorIntDir[1] == 0)	// work if P1IES = 0;
 		{
 			TA0R = 0x00;
 			param[2] = 0.0;
-			__bic_SR_register(GIE);
 			P1IES |= BIT4;
 			DoorIntDir[1] = 1;
 			__bis_SR_register(GIE);
-			tx_stat = MRF_sendPacket(0);
+			TXRequest = 1;
 		}
 		if((P1IN & BIT4) == BIT4 && DoorIntDir[1] == 1)	// work if P1IES = 1;
 		{
 			TA0R = 0x00;
 			param[2] = 1.0;
-			__bic_SR_register(GIE);
 			P1IES &= ~BIT4;
 			DoorIntDir[1] = 0;
 			__bis_SR_register(GIE);
-			tx_stat = MRF_sendPacket(0);
+			TXRequest = 1;
 		}
+		P1IFG &= ~BIT4; // reset Interrupt flag
 	}
 }

@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Unified_sensor.PrjPcb]
+   Generated File[UNI_sensor.TXT]
+   Generated File[UNI_sensor.LDP]
+   Generated File[UNI_sensor.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 18:42:43 On 27.11.2016
