@@ -1,1 +1,0 @@
-"./hal.obj" "./init.obj" "./main.obj" "./rf_module.obj" "../lnk_msp430g2553.cmd" -l"libc.a" 
